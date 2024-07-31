@@ -21,7 +21,7 @@ module "backend" {
 
 
 module "app_alb" {
-  source = "../../terraform-aws-securitygroup"
+  source = "../../terraform-aws-sg"
   project_name = var.project_name
   environment = var.environment
   sg_description = "SG for APP ALB Instances"
@@ -32,7 +32,7 @@ module "app_alb" {
 
 
 module "vpn" {
-  source = "../../terraform-aws-securitygroup"
+  source = "../../terraform-aws-sg"
   project_name = var.project_name
   environment = var.environment
   sg_description = "SG for VPN Instances"

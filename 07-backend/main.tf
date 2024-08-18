@@ -29,10 +29,10 @@ resource "null_resource" "backend" {
         host     = module.backend.private_ip
     }
 
-    /* provisioner "file" {
+    provisioner "file" {
         source      = "${var.common_tags.Component}.sh"
         destination = "/tmp/${var.common_tags.Component}.sh"
-    } */
+    }
 
     provisioner "remote-exec" {               #here to run the file(install ansible and pip) we use remote exec and giving execution permissions
         inline = [

@@ -37,7 +37,7 @@ resource "null_resource" "backend" {
     provisioner "remote-exec" {               #here to run the file(install ansible and pip) we use remote exec and giving execution permissions
         inline = [
             "chmod +x /tmp/${var.common_tags.Component}.sh",
-            "sudo sh /tmp/${var.common_tags.Component}.sh ${var.common_tags.Component} ${var.environment}"
+            "sudo sh /tmp/${var.common_tags.Component}.sh" 
         ]
     } 
 }

@@ -26,7 +26,7 @@ resource "null_resource" "backend" {
         type     = "ssh"
         user     = "ec2-user"
         password = "DevOps321"
-        host     = module.backend.public_ip
+        host     = module.backend.private_ip
     }
 
     provisioner "file" {
@@ -34,10 +34,10 @@ resource "null_resource" "backend" {
         destination = "/tmp/${var.common_tags.Component}.sh"
     }
 
-    provisioner "remote-exec" {               #here to run the file(install ansible and pip) we use remote exec and giving execution permissions
+    provisioner "remote-exec" {
         inline = [
             "chmod +x /tmp/${var.common_tags.Component}.sh",
-            "sudo sh /tmp/${var.common_tags.Component}.sh ${var.common_tags.Component} ${var.environment}" 
+            "sudo sh /tmp/${var.common_tags.Component}.sh ${var.common_tags.Component} ${var.environment}"
         ]
     } 
 }
@@ -49,10 +49,10 @@ resource "aws_ec2_instance_state" "backend" {
   depends_on = [ null_resource.backend ]
 }
 
-resource "aws_ami_from_instance" "backend" {      
+resource "aws_ami_from_instance" "backend" {
   name               = "${var.project_name}-${var.environment}-${var.common_tags.Component}"
   source_instance_id = module.backend.id
-  depends_on = [ aws_ec2_instance_state.backend ]  #the AMI will be take only after instance is stopped. so we added dependency here
+  depends_on = [ aws_ec2_instance_state.backend ]
 }
 
 resource "null_resource" "backend_delete" {
@@ -64,7 +64,7 @@ resource "null_resource" "backend_delete" {
         type     = "ssh"
         user     = "ec2-user"
         password = "DevOps321"
-        host     = module.backend.public_ip
+        host     = module.backend.private_ip
     }
 
     provisioner "local-exec" {
@@ -73,7 +73,6 @@ resource "null_resource" "backend_delete" {
 
     depends_on = [ aws_ami_from_instance.backend ]
 }
-
 
 resource "aws_lb_target_group" "backend" {
   name     = "${var.project_name}-${var.environment}-${var.common_tags.Component}"

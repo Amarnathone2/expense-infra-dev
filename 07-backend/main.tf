@@ -34,12 +34,12 @@ resource "null_resource" "backend" {
         destination = "/tmp/${var.common_tags.Component}.sh"
     }
 
-    provisioner "remote-exec" {               #here to run the file(install ansible and pip) we use remote exec and giving execution permissions
+    /* provisioner "remote-exec" {               #here to run the file(install ansible and pip) we use remote exec and giving execution permissions
         inline = [
             "chmod +x /tmp/${var.common_tags.Component}.sh",
             "sudo sh /tmp/${var.common_tags.Component}.sh ${var.common_tags.Component} ${var.environment}" 
         ]
-    } 
+    }  */
 }
 
 resource "aws_ec2_instance_state" "backend" {

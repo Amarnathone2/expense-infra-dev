@@ -26,7 +26,7 @@ resource "null_resource" "backend" {
         type     = "ssh"
         user     = "ec2-user"
         password = "DevOps321"
-        host     = module.backend.private_ip
+        host     = module.backend.public_ip
     }
 
     provisioner "file" {
@@ -34,12 +34,12 @@ resource "null_resource" "backend" {
         destination = "/tmp/${var.common_tags.Component}.sh"
     }
 
-    /* provisioner "remote-exec" {               #here to run the file(install ansible and pip) we use remote exec and giving execution permissions
+    provisioner "remote-exec" {               #here to run the file(install ansible and pip) we use remote exec and giving execution permissions
         inline = [
             "chmod +x /tmp/${var.common_tags.Component}.sh",
             "sudo sh /tmp/${var.common_tags.Component}.sh ${var.common_tags.Component} ${var.environment}" 
         ]
-    }  */
+    } 
 }
 
 resource "aws_ec2_instance_state" "backend" {
@@ -64,7 +64,7 @@ resource "null_resource" "backend_delete" {
         type     = "ssh"
         user     = "ec2-user"
         password = "DevOps321"
-        host     = module.backend.private_ip
+        host     = module.backend.public_ip
     }
 
     provisioner "local-exec" {
